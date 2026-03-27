@@ -41,26 +41,32 @@ def export_centroids():
         f.write("// DO NOT EDIT MANUALLY\n\n")
         f.write("#ifndef CENTROIDS_H\n")
         f.write("#define CENTROIDS_H\n\n")
+        f.write("#if defined(ARDUINO_ARCH_ESP32)\n")
+        f.write("#include <pgmspace.h>\n")
+        f.write("#define CENTROIDS_PROGMEM PROGMEM\n")
+        f.write("#else\n")
+        f.write("#define CENTROIDS_PROGMEM\n")
+        f.write("#endif\n\n")
         
         f.write(f"#define N_CLUSTERS {n_clusters}\n")
         f.write(f"#define N_FEATURES {n_features}\n")
         f.write(f"#define N_CLASSES {len(label_classes)}\n\n")
         
-        f.write("const float SCALER_MEAN[N_FEATURES] = {\n")
+        f.write("const float SCALER_MEAN[N_FEATURES] CENTROIDS_PROGMEM = {\n")
         for i, val in enumerate(scaler.mean_):
-            f.write(f"    {val:.8f}{',' if i < len(scaler.mean_)-1 else ''}\n")
+            f.write(f"    {val:.8f}f{',' if i < len(scaler.mean_)-1 else ''}\n")
         f.write("};\n\n")
         
-        f.write("const float SCALER_STD[N_FEATURES] = {\n")
+        f.write("const float SCALER_STD[N_FEATURES] CENTROIDS_PROGMEM = {\n")
         for i, val in enumerate(scaler.scale_):
-            f.write(f"    {val:.8f}{',' if i < len(scaler.scale_)-1 else ''}\n")
+            f.write(f"    {val:.8f}f{',' if i < len(scaler.scale_)-1 else ''}\n")
         f.write("};\n\n")
         
-        f.write("const float CENTROIDS[N_CLUSTERS][N_FEATURES] = {\n")
+        f.write("const float CENTROIDS[N_CLUSTERS][N_FEATURES] CENTROIDS_PROGMEM = {\n")
         for i, centroid in enumerate(centroids):
             f.write("    {")
             for j, val in enumerate(centroid):
-                f.write(f"{val:.8f}{',' if j < len(centroid)-1 else ''}")
+                f.write(f"{val:.8f}f{',' if j < len(centroid)-1 else ''}")
             f.write(f"}}{',' if i < len(centroids)-1 else ''}\n")
         f.write("};\n\n")
         
