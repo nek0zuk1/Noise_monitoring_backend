@@ -11,3 +11,7 @@ env/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# ML Data 
+dataset/
+results/
