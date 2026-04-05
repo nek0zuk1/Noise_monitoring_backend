@@ -1329,6 +1329,7 @@ def find_available_port(start_port=5000, max_attempts=10):
 
 
 if __name__ == '__main__':
-    port = find_available_port(5000)
+    # Render provides the PORT environment variable
+    port = int(os.environ.get("PORT", 10000)) 
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=port)
