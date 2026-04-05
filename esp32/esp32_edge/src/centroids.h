@@ -399,5 +399,4 @@ const char* CLASS_NAMES[N_CLASSES] = {
     "Karaoke",
     "Vehicle"
 };
-
 #endif // CENTROIDS_H
